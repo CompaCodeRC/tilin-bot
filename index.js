@@ -3,6 +3,9 @@ const { Client, Intents, MessageEmbed } = require('discord.js');
 const { token } = require('./config.json');
 const scrape = require('@web-master/node-web-scraper');
 const gis = require('g-i-s');
+const alexa = require("alexa-bot-api-v4");
+const ai = new alexa();
+const translate = require('@vitalets/google-translate-api');
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
@@ -25,28 +28,45 @@ client.once('ready', () => {
 	console.log('Ready!');
 });
 
+
+var context = [];
 client.on('messageCreate', async (msg) => {
 	if(msg.content.startsWith(prefix)) {
         let command = (msg.content.split(' ')[0]).replace(prefix, '');
-        let search = () => {
+        let search_f = () => {
             let split_msg = msg.content.split(' ');
             let message = split_msg.slice(1, split_msg.lenght);
             return message.join(' ');
         }
+        let search = search_f();
 
         if(command === 'rule'){
-            if (search()) {
-                let file_img = await get_img(search() + 'rule34');
+            if (search) {
+                let file_img = await get_img(search + 'rule34');
                 msg.channel.send({
                     files: [{
                       attachment: file_img,
-                      name: 'tilinsearch.jpg'
+                      name: search.replace(/\s/g, '')+'.jpg'
                     }]
                 });
             } else {
                 let embed = new MessageEmbed()
                     .setColor('#0099ff')
                     .setDescription('Ya pero que busco?')
+
+                msg.channel.send({ embeds: [embed] });
+            }
+        } else if (command === 'tilin') {
+            if (search) {
+                ai.getReply(search, [], "spanish", "OwO").then(async (reply) => {
+                    let {text} = await translate(reply, {from: 'en', to: 'es'})
+                    msg.reply(text); // send the message
+                    context.push(reply); // add the response to the context
+                });
+            } else {
+                let embed = new MessageEmbed()
+                    .setColor('#0099ff')
+                    .setDescription('Go lolcito?')
 
                 msg.channel.send({ embeds: [embed] });
             }

@@ -10,7 +10,9 @@
   "author": "compacode",
   "license": "ISC",
   "dependencies": {
+    "@vitalets/google-translate-api": "^7.0.0",
     "@web-master/node-web-scraper": "^0.10.0",
+    "alexa-bot-api-v4": "^4.1.4",
     "discord.js": "^13.6.0",
     "g-i-s": "^2.1.6"
   }
