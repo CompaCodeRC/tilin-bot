@@ -16,7 +16,11 @@ const get_img = async (search) => {
     const search_img =  new Promise((resolve, reject) => {
         gis(search, (e, results) => {
             let number = Math.floor(Math.random() * 10) + 1;
-            resolve(results[number].url);
+            if (!results[number]) {
+                resolve('https://imgur.com/tPmDInC.png');
+            } else {
+                resolve(results[number].url);
+            }
         })
     })
 
@@ -42,13 +46,22 @@ client.on('messageCreate', async (msg) => {
 
         if(command === 'rule'){
             if (search) {
-                let file_img = await get_img(search + 'rule34');
-                msg.channel.send({
-                    files: [{
-                      attachment: file_img,
-                      name: search.replace(/\s/g, '')+'.jpg'
-                    }]
-                });
+                try {
+                    let file_img = await get_img(search + 'rule34');
+                    msg.channel.send({
+                        files: [{
+                        attachment: file_img,
+                        name: search.replace(/\s/g, '')+'.jpg'
+                        }]
+                    });
+                } catch {
+                    let embed = new MessageEmbed()
+                    .setColor('#0099ff')
+                    .setDescription('Yara mano me cai, ya me levanto')
+
+                    msg.channel.send({ embeds: [embed] });
+                }
+                
             } else {
                 let embed = new MessageEmbed()
                     .setColor('#0099ff')
