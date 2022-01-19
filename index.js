@@ -1,12 +1,10 @@
 // Require the necessary discord.js classes
 const { Client, Intents, MessageEmbed } = require('discord.js');
 const { token } = require('./config.json');
-const scrape = require('@web-master/node-web-scraper');
 const gis = require('g-i-s');
 const alexa = require("alexa-bot-api-v4");
 const ai = new alexa();
 const translate = require('@vitalets/google-translate-api');
-const get_extension = require('get-url-extension');
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
@@ -49,13 +47,14 @@ client.on('messageCreate', async (msg) => {
             if (search) {
                 try {
                     let file_img = await get_img(search + 'rule34');
-                    let ext_img = get_extension(file_img);
+                    msg.channel.send(file_img);
+                    /*
                     msg.channel.send({
                         files: [{
                         attachment: file_img,
                         name: search.replace(/\s/g, '')+ext_img
                         }]
-                    });
+                    }); */
                 } catch {
                     let embed = new MessageEmbed()
                     .setColor('#0099ff')
