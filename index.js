@@ -18,7 +18,8 @@ const get_img = async (search) => {
             if (!results[number]) {
                 resolve('https://imgur.com/tPmDInC.png');
             } else {
-                resolve(results[number].url);
+                let decode_img = decodeURIComponent(results[number].url)
+                resolve(decode_img);
             }
         })
     })
