@@ -6,6 +6,7 @@ const gis = require('g-i-s');
 const alexa = require("alexa-bot-api-v4");
 const ai = new alexa();
 const translate = require('@vitalets/google-translate-api');
+const get_extension = require('get-url-extension');
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
@@ -48,10 +49,11 @@ client.on('messageCreate', async (msg) => {
             if (search) {
                 try {
                     let file_img = await get_img(search + 'rule34');
+                    let ext_img = get_extension(file_img);
                     msg.channel.send({
                         files: [{
                         attachment: file_img,
-                        name: search.replace(/\s/g, '')+'.jpg'
+                        name: search.replace(/\s/g, '')+ext_img
                         }]
                     });
                 } catch {
