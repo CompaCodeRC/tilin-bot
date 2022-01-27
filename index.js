@@ -35,6 +35,9 @@ client.once('ready', () => {
 
 var context = [];
 client.on('messageCreate', async (msg) => {
+    if(msg.content === 'no se habla de bruno') {
+        msg.reply('NO NO NOOO...');
+    }
 	if(msg.content.startsWith(prefix)) {
         let command = (msg.content.split(' ')[0]).replace(prefix, '');
         let search_f = () => {
